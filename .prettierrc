@@ -1,0 +1,19 @@
+{
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^src/assets/(.*)$",
+    "^src/pages/(.*)$",
+    "^src/hooks/(.*)$",
+    "^src/helper/(.*)$",
+    "^src/components/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderBuiltinModulesToTop": true,
+  "importOrderMergeDuplicateImports": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderCaseInsensitive": true,
+  "jsxSingleQuote": true,
+  "singleQuote": false,
+  "tabWidth": 2
+}
