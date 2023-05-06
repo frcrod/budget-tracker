@@ -3,5 +3,9 @@
 @tailwind utilities;
 
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Manrope", sans-serif;
+}
+
+h1 {
+  font-family: "Prata", "Manrope", Courier, monospace;
 }

@@ -9,7 +9,7 @@ export default function TimeSpanButton(props) {
 
   return (
     <button
-      class={`btn ${
+      class={`btn font-bold ${
         props.timeSpan.value === props.value ? "btn-primary" : "btn-ghost"
       }`}
       onClick={timeSpanButtonOnClick}
