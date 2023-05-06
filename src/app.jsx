@@ -8,8 +8,8 @@ import Navbar from "src/components/navbar";
 
 export function App() {
   return (
-    <main class='flex flex-col h-screen justify-between'>
-      <section>
+    <main class='flex flex-col gap-16 h-screen justify-between'>
+      <section class=''>
         <Navbar />
         <Router>
           <Home path='/' />
