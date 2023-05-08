@@ -1,22 +1,41 @@
-import { useSignal } from "@preact/signals";
-import dayjs from "dayjs";
-import { useEffect } from "preact/hooks";
+import { effect, useComputed, useSignal } from "@preact/signals";
+import DayJS from "dayjs";
 
 import ExpenseForm from "src/components/expense-form";
+import ExpenseTable from "src/components/expense-table";
 import TimeSpanButton from "src/components/time-span-button";
 
 export default function Me() {
   const timeSpan = useSignal("today");
-  const currentDate = dayjs();
+  const expenses = useSignal([
+    {
+      id: crypto.randomUUID(),
+      name: "Lorem",
+      amount: 300,
+      date: new DayJS(),
+      category: "food",
+    },
+    {
+      id: crypto.randomUUID(),
+      name: "Ipsum",
+      amount: 300,
+      date: new DayJS(),
+      category: "transportation",
+    },
+  ]);
+
+  const currentDate = DayJS();
   const startOfTheWeek = currentDate.startOf("week").add(1, "day");
   const endOfTheWeek = currentDate.endOf("week").add(1, "day");
+  const weekDays = useComputed(
+    () => `${startOfTheWeek.format("MMMM D")}-${endOfTheWeek.format("MMMM D")}`
+  );
 
-  useEffect(() => {
-    console.log(timeSpan.value);
-  }, [timeSpan.value]);
   return (
     <div class='drop-shadow-md'>
-      <h1 class='text-center text-5xl my-6 drop-shadow-md'>Budget Tracker</h1>
+      <h1 class='text-center text-5xl my-6 drop-shadow-lg shadow-primary'>
+        Budget Tracker
+      </h1>
       <div class='card card-compact bg-base-100 shadow-md px-8 py-6 mx-6'>
         <section class='px-6'>
           <header class='flex justify-between pb-2'>
@@ -25,8 +44,8 @@ export default function Me() {
             <TimeSpanButton timeSpan={timeSpan} value='this-month' />
           </header>
           <div className='divider'></div>
-          <div class='flex flex-wrap-reverse justify-between gap-2'>
-            <div className='stats shadow bg-rose-100 rounded-3xl w-34'>
+          <div class='grid grid-cols-1 grid-rows-3 lg:grid-rows-1 lg:grid-cols-3 justify-between gap-2 place-items-center'>
+            <div className='stats shadow bg-rose-100 rounded-3xl w-34 place-self-center lg:place-self-start lg:self-center p-3'>
               <div className='stat text-center'>
                 <div className='stat-title font-bold'>
                   {timeSpan.value === "today" && currentDate.format("MMMM")}
@@ -40,17 +59,14 @@ export default function Me() {
                 </div>
                 <div className='stat-desc'>
                   {timeSpan.value === "today" && currentDate.format("dddd")}
-                  {timeSpan.value === "this-week" &&
-                    `${startOfTheWeek.format("MMMM D")}-${endOfTheWeek.format(
-                      "MMMM D"
-                    )}`}
+                  {timeSpan.value === "this-week" && weekDays}
                   {timeSpan.value === "this-month" &&
                     currentDate.format("YYYY")}
                 </div>
               </div>
             </div>
-            <ExpenseForm />
-            <form class='self-start bg-base-100 py-3 px-4 rounded self-end'>
+            <ExpenseForm expenses={expenses} class='' />
+            <form class='self-start bg-base-100 w-10/12 lg:w-max py-3 px-4 rounded place-self-end'>
               <div className='form-control'>
                 <label className='label'>
                   <span className='label-text font-bold text-neutral text-left'>
@@ -70,42 +86,7 @@ export default function Me() {
           </div>
           <div className='divider'></div>
         </section>
-        <div className='overflow-x-auto rounded px-6 py-6'>
-          <table className='table w-full'>
-            {/* head */}
-            <thead>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Job</th>
-                <th>Favorite Color</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* row 1 */}
-              <tr>
-                <th>1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-              </tr>
-              {/* row 2 */}
-              <tr>
-                <th>2</th>
-                <td>Hart Hagerty</td>
-                <td>Desktop Support Technician</td>
-                <td>Purple</td>
-              </tr>
-              {/* row 3 */}
-              <tr>
-                <th>3</th>
-                <td>Brice Swyre</td>
-                <td>Tax Accountant</td>
-                <td>Red</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ExpenseTable expenses={expenses} />
       </div>
     </div>
   );

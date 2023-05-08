@@ -7,7 +7,10 @@ export default function Navbar() {
     <div className='navbar bg-base-100'>
       <div className='flex-1'>
         <Link href='/' className='btn btn-lg btn-ghost normal-case text-xl'>
-          <img className='w-36' src={BudgetistaIcon} />
+          <img
+            className='w-36 object-scale-down object-center'
+            src={BudgetistaIcon}
+          />
         </Link>
       </div>
       <div className='flex-none'>
