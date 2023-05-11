@@ -20,9 +20,6 @@ export default {
           error: "#f87171",
         },
       },
-      "cupcake",
-      "dark",
-      "cmyk",
     ],
   },
 };
