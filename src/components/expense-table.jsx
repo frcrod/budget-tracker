@@ -1,8 +1,11 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useSignal } from "@preact/signals";
+import DayJS from "dayjs";
 
 export default function ExpenseTable(props) {
   const [divRef] = useAutoAnimate();
   const [tableRef] = useAutoAnimate();
+  const currentDate = useSignal(DayJS());
 
   const removeExpense = (id, expenses) => {
     console.log(id, expenses.value);
@@ -37,23 +40,40 @@ export default function ExpenseTable(props) {
             </tr>
           </thead>
           <tbody ref={tableRef}>
-            {props.expenses.value.map((expense, index) => (
-              <tr key={expense.id}>
-                <th>{Number(index) + 1}</th>
-                <td>{expense.name}</td>
-                <td>₱ {expense.amount}</td>
-                <td>{expense.date.format("MMMM D YYYY")}</td>
-                <td class='capitalize'>{expense.category}</td>
-                <td class=''>
-                  <button
-                    class='btn btn-outline btn-error'
-                    onClick={() => removeExpense(expense.id, props.expenses)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {props.expenses.value
+              .filter((expense) => {
+                switch (props.timeSpan.value) {
+                  case "today":
+                    // code block
+                    return currentDate.value.isSame(expense.date, "day");
+                    break;
+                  case "this-week":
+                    return currentDate.value.isSame(expense.date, "week");
+                    // code block
+                    break;
+                  case "this-month":
+                    // code block
+                    return currentDate.value.isSame(expense.date, "month");
+                    break;
+                }
+              })
+              .map((expense, index) => (
+                <tr key={expense.id}>
+                  <th>{Number(index) + 1}</th>
+                  <td>{expense.name}</td>
+                  <td>₱ {expense.amount}</td>
+                  <td>{expense.date.format("MMMM D YYYY")}</td>
+                  <td class='capitalize'>{expense.category}</td>
+                  <td class=''>
+                    <button
+                      class='btn btn-outline btn-error'
+                      onClick={() => removeExpense(expense.id, props.expenses)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       ) : (
@@ -63,7 +83,7 @@ export default function ExpenseTable(props) {
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
               viewBox='0 0 24 24'
-              className='stroke-info flex-shrink-0 w-6 h-6'
+              className='stroke-primary flex-shrink-0 text-black w-10 h-10'
             >
               <path
                 strokeLinecap='round'
@@ -72,7 +92,20 @@ export default function ExpenseTable(props) {
                 d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
               ></path>
             </svg>
-            <span>Currently empty...</span>
+            <div>
+              <h3 className='font-bold'>
+                There are currently no recorded expenses
+              </h3>
+              <span class=''>
+                As of now, there are no expenses that have been recorded or
+                documented in the expense list. The list remains empty and
+                devoid of any financial transactions or expenditures. It could
+                indicate that there have been no expenses incurred during the
+                specified period or that none have been added to the list yet.
+                Regardless, the current state of the expense list is that it
+                does not contain any entries related to expenses.
+              </span>
+            </div>
           </div>
         </div>
       )}{" "}

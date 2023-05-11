@@ -1,28 +1,14 @@
 import { effect, useComputed, useSignal } from "@preact/signals";
 import DayJS from "dayjs";
+import { Link } from "preact-router";
 
 import ExpenseForm from "src/components/expense-form";
+import ExpensePieChart from "src/components/expense-pie-chart";
 import ExpenseTable from "src/components/expense-table";
 import TimeSpanButton from "src/components/time-span-button";
 
-export default function Me() {
+export default function Me(props) {
   const timeSpan = useSignal("today");
-  const expenses = useSignal([
-    {
-      id: crypto.randomUUID(),
-      name: "Lorem",
-      amount: 300,
-      date: new DayJS(),
-      category: "food",
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "Ipsum",
-      amount: 300,
-      date: new DayJS(),
-      category: "transportation",
-    },
-  ]);
 
   const currentDate = DayJS();
   const startOfTheWeek = currentDate.startOf("week").add(1, "day");
@@ -32,32 +18,32 @@ export default function Me() {
   );
 
   return (
-    <div class='drop-shadow-md'>
+    <div class='drop-shadow-md flex flex-col justify-items-center'>
       <h1 class='text-center text-5xl my-6 drop-shadow-lg shadow-primary'>
         Budget Tracker
       </h1>
-      <div class='card card-compact bg-base-100 shadow-md px-8 py-6 mx-6'>
-        <section class='px-6'>
+      <div class='md:card md:card-compact bg-base-100 shadow-md px-8 py-6 md:mx-6 items-center'>
+        <section class='px-6 w-full'>
           <header class='flex justify-between pb-2'>
             <TimeSpanButton timeSpan={timeSpan} value='today' />
             <TimeSpanButton timeSpan={timeSpan} value='this-week' />
             <TimeSpanButton timeSpan={timeSpan} value='this-month' />
           </header>
           <div className='divider'></div>
-          <div class='grid grid-cols-1 grid-rows-3 lg:grid-rows-1 lg:grid-cols-3 justify-between gap-2 place-items-center'>
-            <div className='stats shadow bg-rose-100 rounded-3xl w-34 place-self-center lg:place-self-start lg:self-center p-3'>
+          <div class='grid grid-cols-1 grid-rows-3 lg:grid-rows-1 lg:grid-cols-3 justify-evenly md:justify-between place-items-center'>
+            <div className='stats shadow bg-rose-100 w-min rounded-3xl h-min place-self-center lg:place-self-start lg:self-center p-3'>
               <div className='stat text-center'>
-                <div className='stat-title font-bold'>
+                <div className='stat-title text-4xl font-bold'>
                   {timeSpan.value === "today" && currentDate.format("MMMM")}
                   {timeSpan.value === "this-week" && currentDate.format("MMMM")}
                 </div>
-                <div className='stat-value text-secondary-focus'>
+                <div className='stat-value text-6xl text-secondary-focus'>
                   {timeSpan.value === "today" && currentDate.format("d")}
                   {timeSpan.value === "this-week" && `1`}
                   {timeSpan.value === "this-month" &&
                     currentDate.format("MMMM")}
                 </div>
-                <div className='stat-desc'>
+                <div className='stat-desc text-2xl text-sm'>
                   {timeSpan.value === "today" && currentDate.format("dddd")}
                   {timeSpan.value === "this-week" && weekDays}
                   {timeSpan.value === "this-month" &&
@@ -65,9 +51,9 @@ export default function Me() {
                 </div>
               </div>
             </div>
-            <ExpenseForm expenses={expenses} class='' />
-            <form class='self-start bg-base-100 w-10/12 lg:w-max py-3 px-4 rounded place-self-end'>
-              <div className='form-control'>
+            <ExpenseForm expenses={props.expenses} class='' />
+            <form class='self-start bg-base-100 w-10/12 lg:w-max py-3 px-4 rounded place-items-center h-full'>
+              <div className='form-control mx-auto'>
                 <label className='label'>
                   <span className='label-text font-bold text-neutral text-left'>
                     Personal Budget
@@ -82,12 +68,18 @@ export default function Me() {
                   <span class='bg-transparent'>PHP</span>
                 </label>
               </div>
+              <ExpensePieChart expenses={props.expenses} timeSpan={timeSpan} />
             </form>
           </div>
           <div className='divider'></div>
         </section>
-        <ExpenseTable expenses={expenses} />
+        <ExpenseTable expenses={props.expenses} timeSpan={timeSpan} />
       </div>
+      {/* <Link href={`/me/summary/${timeSpan.value}`} class='mt-7 mx-auto'>
+        <button class='btn btn-primary btn-wide rounded-full mx-auto'>
+          Summary
+        </button>
+      </Link> */}
     </div>
   );
 }

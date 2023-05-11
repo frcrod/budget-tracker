@@ -6,7 +6,7 @@ export default function CategoryButton(props) {
   return (
     <>
       <button
-        class={`btn btn-sm font-bold ${
+        class={`btn btn-sm text-xs w-fit font-bold ${
           props.category.value === props.value ? "btn-secondary" : "btn-ghost"
         }`}
         onClick={categoryButtonClick}

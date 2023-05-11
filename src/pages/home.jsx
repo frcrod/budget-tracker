@@ -1,7 +1,6 @@
 import { faLightbulb } from "@fortawesome/free-regular-svg-icons";
 import {
   faArrowRight,
-  faBook,
   faBookOpen,
   faChartPie,
   faDownload,
