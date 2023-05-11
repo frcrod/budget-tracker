@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "npx http-server ./dist",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
@@ -22,6 +23,7 @@
     "preact-router": "^4.1.0",
     "react-hook-form": "^7.43.9",
     "recharts": "^2.6.0",
+    "uuid": "^9.0.0",
     "yup": "^1.1.1"
   },
   "devDependencies": {

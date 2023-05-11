@@ -2,6 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { batch, useSignal } from "@preact/signals";
 import DayJS from "dayjs";
 import { useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 import { number, object, string } from "yup";
 
 import CategoryButton from "src/components/category-button";
@@ -35,7 +36,7 @@ export default function ExpenseForm(props) {
     batch(() => {
       expenses.value = [
         ...expenses.value,
-        { ...expense, id: crypto.randomUUID(), date: new DayJS() },
+        { ...expense, id: uuidv4(), date: new DayJS() },
       ];
     });
   };

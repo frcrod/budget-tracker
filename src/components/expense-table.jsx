@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useSignal } from "@preact/signals";
+import { useComputed, useSignal } from "@preact/signals";
 import DayJS from "dayjs";
 
 export default function ExpenseTable(props) {
@@ -8,10 +8,27 @@ export default function ExpenseTable(props) {
   const currentDate = useSignal(DayJS());
 
   const removeExpense = (id, expenses) => {
-    console.log(id, expenses.value);
     expenses.value = expenses.value.filter((expense) => expense.id !== id);
-    console.log(id, expenses.value);
   };
+
+  const filterExpenses = useComputed(() =>
+    props.expenses.value.filter((expense) => {
+      switch (props.timeSpan.value) {
+        case "today":
+          // code block
+          return currentDate.value.isSame(expense.date, "day");
+          break;
+        case "this-week":
+          return currentDate.value.isSame(expense.date, "week");
+          // code block
+          break;
+        case "this-month":
+          // code block
+          return currentDate.value.isSame(expense.date, "month");
+          break;
+      }
+    })
+  );
 
   const editExpense = (id, newExpense, expenses) => {
     expenses.value.forEach((expense, index) => {
@@ -26,7 +43,7 @@ export default function ExpenseTable(props) {
       className='overflow-x-auto overflow-y-hidden rounded px-6'
       ref={divRef}
     >
-      {props.expenses.value.length ? (
+      {filterExpenses.value.length ? (
         <table className='table w-full table-fixed mb-3'>
           {/* head */}
           <thead>
@@ -40,40 +57,23 @@ export default function ExpenseTable(props) {
             </tr>
           </thead>
           <tbody ref={tableRef}>
-            {props.expenses.value
-              .filter((expense) => {
-                switch (props.timeSpan.value) {
-                  case "today":
-                    // code block
-                    return currentDate.value.isSame(expense.date, "day");
-                    break;
-                  case "this-week":
-                    return currentDate.value.isSame(expense.date, "week");
-                    // code block
-                    break;
-                  case "this-month":
-                    // code block
-                    return currentDate.value.isSame(expense.date, "month");
-                    break;
-                }
-              })
-              .map((expense, index) => (
-                <tr key={expense.id}>
-                  <th>{Number(index) + 1}</th>
-                  <td>{expense.name}</td>
-                  <td>₱ {expense.amount}</td>
-                  <td>{expense.date.format("MMMM D YYYY")}</td>
-                  <td class='capitalize'>{expense.category}</td>
-                  <td class=''>
-                    <button
-                      class='btn btn-outline btn-error'
-                      onClick={() => removeExpense(expense.id, props.expenses)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+            {filterExpenses.value.map((expense, index) => (
+              <tr key={expense.id}>
+                <th>{Number(index) + 1}</th>
+                <td>{expense.name}</td>
+                <td>₱ {expense.amount}</td>
+                <td>{expense.date.format("MMMM D YYYY")}</td>
+                <td class='capitalize'>{expense.category}</td>
+                <td class=''>
+                  <button
+                    class='btn btn-outline btn-error'
+                    onClick={() => removeExpense(expense.id, props.expenses)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       ) : (
@@ -94,7 +94,10 @@ export default function ExpenseTable(props) {
             </svg>
             <div>
               <h3 className='font-bold'>
-                There are currently no recorded expenses
+                There are currently no recorded expenses for{" "}
+                <span class='capitalize'>
+                  {props.timeSpan.value.replace("-", " ")}
+                </span>
               </h3>
               <span class=''>
                 As of now, there are no expenses that have been recorded or

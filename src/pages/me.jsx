@@ -1,10 +1,10 @@
-import { effect, useComputed, useSignal } from "@preact/signals";
+import { useComputed, useSignal } from "@preact/signals";
 import DayJS from "dayjs";
-import { Link } from "preact-router";
 
 import ExpenseForm from "src/components/expense-form";
 import ExpensePieChart from "src/components/expense-pie-chart";
 import ExpenseTable from "src/components/expense-table";
+import PersonalBudgetForm from "src/components/personal-budget-form";
 import TimeSpanButton from "src/components/time-span-button";
 
 export default function Me(props) {
@@ -13,6 +13,7 @@ export default function Me(props) {
   const currentDate = DayJS();
   const startOfTheWeek = currentDate.startOf("week").add(1, "day");
   const endOfTheWeek = currentDate.endOf("week").add(1, "day");
+
   const weekDays = useComputed(
     () => `${startOfTheWeek.format("MMMM D")}-${endOfTheWeek.format("MMMM D")}`
   );
@@ -30,8 +31,8 @@ export default function Me(props) {
             <TimeSpanButton timeSpan={timeSpan} value='this-month' />
           </header>
           <div className='divider'></div>
-          <div class='grid grid-cols-1 grid-rows-3 lg:grid-rows-1 lg:grid-cols-3 justify-evenly md:justify-between place-items-center'>
-            <div className='stats shadow bg-rose-100 w-min rounded-3xl h-min place-self-center lg:place-self-start lg:self-center p-3'>
+          <div class='grid grid-cols-1 grid-rows-3 lg:grid-rows-1 lg:grid-cols-3 justify-evenly h-min md:justify-between place-items-center'>
+            <div className='stats drop-shadow-md bg-rose-100 w-min rounded-3xl h-min place-self-center lg:place-self-start lg:self-center p-3'>
               <div className='stat text-center'>
                 <div className='stat-title text-4xl font-bold'>
                   {timeSpan.value === "today" && currentDate.format("MMMM")}
@@ -52,24 +53,13 @@ export default function Me(props) {
               </div>
             </div>
             <ExpenseForm expenses={props.expenses} class='' />
-            <form class='self-start bg-base-100 w-10/12 lg:w-max py-3 px-4 rounded place-items-center h-full'>
-              <div className='form-control mx-auto'>
-                <label className='label'>
-                  <span className='label-text font-bold text-neutral text-left'>
-                    Personal Budget
-                  </span>
-                </label>
-                <label className='input-group'>
-                  <input
-                    type='text'
-                    placeholder='0.01'
-                    className='input input-sm input-bordered bg-transparent font-bold border-0 text-primary-content'
-                  />
-                  <span class='bg-transparent'>PHP</span>
-                </label>
-              </div>
+            <PersonalBudgetForm
+              budget={props.budget}
+              expenses={props.expenses}
+              timeSpan={timeSpan}
+            >
               <ExpensePieChart expenses={props.expenses} timeSpan={timeSpan} />
-            </form>
+            </PersonalBudgetForm>
           </div>
           <div className='divider'></div>
         </section>

@@ -18,7 +18,6 @@ export default function ExpensePieChart(props) {
 
     props.expenses.value
       .filter((expense) => {
-        console.log(expense);
         switch (props.timeSpan.value) {
           case "today":
             // code block
@@ -42,7 +41,6 @@ export default function ExpensePieChart(props) {
         }
       });
 
-    console.log(total);
     return Object.entries(total).map(([category, total]) => {
       return { category, total };
     });
@@ -53,17 +51,17 @@ export default function ExpensePieChart(props) {
       <text
         x={x}
         y={y}
-        className='text-xs font-bold text-gray-600'
+        className='text-xs capitalize font-bold text-gray-600'
         dominantBaseline='central'
         textAnchor='middle'
       >
-        {name}
+        {name.replace("-", " ")}
       </text>
     );
   };
 
   return (
-    <ResponsiveContainer height='80%'>
+    <ResponsiveContainer height='75%'>
       <PieChart outerRadius={90} width={730} height={600}>
         <Pie
           data={totalExpenses.value}

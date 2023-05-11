@@ -8,6 +8,7 @@ import {
   faMoneyBills,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "preact-router";
 
 import Feature from "src/components/feature";
 
@@ -62,6 +63,11 @@ export default function Home() {
               <h3 class='text-xl font-bold'>Save</h3>
             </div>
           </div>
+          <Link href='/me'>
+            <button className='btn btn-primary btn-wide font-bold text-base mt-10'>
+              Get Started
+            </button>
+          </Link>
         </header>
       </section>
       <div className='divider w-8/12 mx-auto my-10'></div>
