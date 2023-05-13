@@ -1,5 +1,6 @@
 import { useComputed, useSignal } from "@preact/signals";
 import DayJS from "dayjs";
+import { Link } from "preact-router";
 
 import ExpenseForm from "src/components/expense-form";
 import ExpensePieChart from "src/components/expense-pie-chart";
@@ -39,8 +40,8 @@ export default function Me(props) {
                   {timeSpan.value === "this-week" && currentDate.format("MMMM")}
                 </div>
                 <div className='stat-value text-6xl text-secondary-focus'>
-                  {timeSpan.value === "today" && currentDate.format("d")}
-                  {timeSpan.value === "this-week" && `1`}
+                  {timeSpan.value === "today" && currentDate.format("D")}
+                  {timeSpan.value === "this-week" && currentDate.format("D")}
                   {timeSpan.value === "this-month" &&
                     currentDate.format("MMMM")}
                 </div>
@@ -65,11 +66,11 @@ export default function Me(props) {
         </section>
         <ExpenseTable expenses={props.expenses} timeSpan={timeSpan} />
       </div>
-      {/* <Link href={`/me/summary/${timeSpan.value}`} class='mt-7 mx-auto'>
+      <Link href={`/me/budget-planner`} class='mt-7 mx-auto'>
         <button class='btn btn-primary btn-wide rounded-full mx-auto'>
-          Summary
+          Budget Planner
         </button>
-      </Link> */}
+      </Link>
     </div>
   );
 }

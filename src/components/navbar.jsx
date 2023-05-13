@@ -1,6 +1,6 @@
 import { Link } from "preact-router";
 
-import BudgetistaIcon from "src/assets/budgetista_icon.png";
+import BudgetistaIcon from "src/assets/budgetista_icon.webp";
 
 export default function Navbar() {
   return (

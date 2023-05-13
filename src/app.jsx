@@ -1,11 +1,10 @@
 import { effect, useSignal } from "@preact/signals";
 import DayJS from "dayjs";
+import AsyncRoute from "preact-async-route";
 import { Router } from "preact-router";
 import { v4 as uuidv4 } from "uuid";
 
 import Home from "src/pages/home";
-import Me from "src/pages/me";
-import Summary from "src/pages/summary";
 
 import getLocalStorage from "src/helper/getLocalStorage";
 
@@ -53,6 +52,10 @@ export function App() {
       },
     ]
   );
+  const plannedExpenses = useSignal({
+    food: [{ id: uuidv4(), name: "Lorem", amount: 300 }],
+    shopping: [{ id: uuidv4(), name: "Ipsum", amount: 6000 }],
+  });
 
   effect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
@@ -65,8 +68,32 @@ export function App() {
         <Navbar />
         <Router>
           <Home path='/' />
-          <Me path='/me' expenses={expenses} budget={budget} />
-          <Summary path='/me/summary/:timeSpan' expenses={expenses} />
+          <AsyncRoute
+            path='/me'
+            expenses={expenses}
+            budget={budget}
+            getComponent={() =>
+              import("src/pages/me").then((module) => module.default)
+            }
+          />
+          <AsyncRoute
+            path='/me/summary/:timeSpan'
+            expenses={expenses}
+            getComponent={() =>
+              import("src/pages/summary").then((module) => module.default)
+            }
+          />
+          <AsyncRoute
+            path='/me/budget-planner'
+            expenses={expenses}
+            plannedExpenses={plannedExpenses}
+            budget={budget}
+            getComponent={() =>
+              import("src/pages/budget-planner").then(
+                (module) => module.default
+              )
+            }
+          />
         </Router>
       </section>
       <Footer />
