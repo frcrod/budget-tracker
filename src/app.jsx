@@ -94,6 +94,18 @@ export function App() {
               )
             }
           />
+          <AsyncRoute
+            path='/budget-tips'
+            getComponent={() =>
+              import("src/pages/budget-tips").then((module) => module.default)
+            }
+          />
+          <AsyncRoute
+            path='/about-us'
+            getComponent={() =>
+              import("src/pages/about-us").then((module) => module.default)
+            }
+          />
         </Router>
       </section>
       <Footer />

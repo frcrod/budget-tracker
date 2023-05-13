@@ -63,7 +63,7 @@ export default function Home() {
               <h3 class='text-xl font-bold'>Save</h3>
             </div>
           </div>
-          <Link href='/me'>
+          <Link href='/me/budget-planner'>
             <button className='btn btn-primary btn-wide font-bold text-base mt-10'>
               Get Started
             </button>

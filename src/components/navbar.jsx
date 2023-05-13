@@ -13,7 +13,13 @@ export default function Navbar() {
           />
         </Link>
       </div>
-      <div className='flex-none'>
+      <div className='flex-none align-center'>
+        <Link href='/about-us' class='btn btn-square btn-ghost mx-2'>
+          <span class='font-bold'>About us</span>
+        </Link>
+        <Link href='/budget-tips' class='btn btn-square btn-ghost mx-2'>
+          <span class='font-bold'>Tips</span>
+        </Link>
         <Link href='/me' className='btn btn-square btn-ghost'>
           <svg
             xmlns='http://www.w3.org/2000/svg'

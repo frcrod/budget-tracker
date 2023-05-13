@@ -71,7 +71,7 @@ export default function BudgetPlanner(props) {
       </div>
       <Link href={`/me`} class='mt-7 mx-auto'>
         <button class='btn btn-primary btn-wide rounded-full mx-auto'>
-          Go back
+          Budget Tracker
         </button>
       </Link>
     </div>
