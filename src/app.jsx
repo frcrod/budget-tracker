@@ -6,15 +6,16 @@ import { v4 as uuidv4 } from "uuid";
 
 import Home from "src/pages/home";
 
-import getLocalStorage from "src/helper/getLocalStorage";
+import getExpensesFromLocal from "src/helper/getExpensesFromLocal";
 
 import Footer from "src/components/footer";
+import Loading from "src/components/loading";
 import Navbar from "src/components/navbar";
 
 export function App() {
   const budget = useSignal(JSON.parse(localStorage.getItem("budget")) || 10000);
   const expenses = useSignal(
-    getLocalStorage() || [
+    getExpensesFromLocal() || [
       {
         id: uuidv4(),
         name: "Lorem",
@@ -52,14 +53,17 @@ export function App() {
       },
     ]
   );
-  const plannedExpenses = useSignal({
-    food: [{ id: uuidv4(), name: "Lorem", amount: 300 }],
-    shopping: [{ id: uuidv4(), name: "Ipsum", amount: 6000 }],
-  });
+  const plannedExpenses = useSignal(
+    JSON.parse(localStorage.getItem("plannedExpenses")) || {
+      food: [{ id: uuidv4(), name: "Lorem", amount: 300 }],
+      shopping: [{ id: uuidv4(), name: "Ipsum", amount: 6000 }],
+    }
+  );
 
   effect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
     localStorage.setItem("budget", JSON.stringify(budget));
+    localStorage.setItem("plannedExpenses", JSON.stringify(plannedExpenses));
   }, [expenses, budget]);
 
   return (
@@ -75,6 +79,7 @@ export function App() {
             getComponent={() =>
               import("src/pages/me").then((module) => module.default)
             }
+            loading={() => <Loading />}
           />
           <AsyncRoute
             path='/me/summary/:timeSpan'
@@ -93,6 +98,7 @@ export function App() {
                 (module) => module.default
               )
             }
+            loading={() => <Loading />}
           />
           <AsyncRoute
             path='/budget-tips'

@@ -1,6 +1,6 @@
 import DayJS from "dayjs";
 
-export default function getLocalStorage() {
+export default function getExpensesFromLocal() {
   const expenses = JSON.parse(localStorage.getItem("expenses"));
 
   if (expenses == null) return null;
