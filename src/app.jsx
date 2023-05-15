@@ -71,7 +71,7 @@ export function App() {
       <section class=''>
         <Navbar />
         <Router>
-          <Home path='/' />
+          <Home path='/' loading={() => <Loading />} />
           <AsyncRoute
             path='/me'
             expenses={expenses}
@@ -105,12 +105,14 @@ export function App() {
             getComponent={() =>
               import("src/pages/budget-tips").then((module) => module.default)
             }
+            loading={() => <Loading />}
           />
           <AsyncRoute
             path='/about-us'
             getComponent={() =>
               import("src/pages/about-us").then((module) => module.default)
             }
+            loading={() => <Loading />}
           />
         </Router>
       </section>
